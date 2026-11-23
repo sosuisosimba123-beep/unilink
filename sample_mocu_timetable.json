@@ -1,0 +1,42 @@
+[
+  {
+    "group_code": "CIT",
+    "course_code": "CS 201",
+    "course_name": "Data Structures & Algorithms",
+    "day_of_week": "Monday",
+    "start_time": "08:00",
+    "end_time": "10:00",
+    "venue": "LT 1",
+    "instructor": "Dr. Bakari"
+  },
+  {
+    "group_code": "CIT",
+    "course_code": "CS 202",
+    "course_name": "Database Systems",
+    "day_of_week": "Monday",
+    "start_time": "10:30",
+    "end_time": "12:30",
+    "venue": "CoICT Lab",
+    "instructor": "Prof. Mbwambo"
+  },
+  {
+    "group_code": "BACM I",
+    "course_code": "ACC 101",
+    "course_name": "Financial Accounting I",
+    "day_of_week": "Tuesday",
+    "start_time": "09:00",
+    "end_time": "11:00",
+    "venue": "Ushirika Hall",
+    "instructor": "Dr. Johness Mwita"
+  },
+  {
+    "group_code": "LL.B I",
+    "course_code": "LAW 101",
+    "course_name": "Constitutional Law",
+    "day_of_week": "Wednesday",
+    "start_time": "13:00",
+    "end_time": "15:00",
+    "venue": "Administration Block",
+    "instructor": "Mr. Kiangi P."
+  }
+]
