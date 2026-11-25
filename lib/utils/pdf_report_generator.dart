@@ -8,6 +8,7 @@ class PdfReportGenerator {
   static Future<void> generateAndShareReport({
     required ClassSessionModel session,
     required List<AttendanceRecordModel> records,
+    String institutionName = 'MOSHI COOPERATIVE UNIVERSITY (MoCU)',
   }) async {
     final pdf = pw.Document();
 
@@ -15,6 +16,16 @@ class PdfReportGenerator {
       pw.MultiPage(
         pageFormat: PdfPageFormat.a4,
         margin: const pw.EdgeInsets.all(32),
+        footer: (pw.Context context) {
+          return pw.Container(
+            alignment: pw.Alignment.centerRight,
+            margin: const pw.EdgeInsets.only(top: 10),
+            child: pw.Text(
+              'Powered by Unilink • Intelligent Campus Attendance Platform (Page ${context.pageNumber} of ${context.pagesCount})',
+              style: const pw.TextStyle(fontSize: 8, color: PdfColors.grey600),
+            ),
+          );
+        },
         build: (pw.Context context) {
           return [
             pw.Row(
@@ -23,14 +34,17 @@ class PdfReportGenerator {
                 pw.Column(
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
-                    pw.Text('MOSHI COOPERATIVE UNIVERSITY (MoCU)', style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold, color: PdfColors.indigo900)),
+                    pw.Text(institutionName, style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold, color: PdfColors.indigo900)),
                     pw.Text('Official Academic Attendance & Exam Eligibility Report', style: pw.TextStyle(fontSize: 10, color: PdfColors.grey700)),
                   ],
                 ),
                 pw.Container(
-                  padding: const pw.EdgeInsets.all(8),
-                  decoration: const pw.BoxDecoration(color: PdfColors.indigo100, shape: pw.BoxShape.circle),
-                  child: pw.Text('MoCU', style: pw.TextStyle(fontSize: 10, fontWeight: pw.FontWeight.bold, color: PdfColors.indigo900)),
+                  padding: const pw.EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: const pw.BoxDecoration(
+                    color: PdfColors.indigo900,
+                    borderRadius: pw.BorderRadius.all(pw.Radius.circular(6)),
+                  ),
+                  child: pw.Text('unilink', style: pw.TextStyle(fontSize: 12, fontWeight: pw.FontWeight.bold, color: PdfColors.white)),
                 ),
               ],
             ),
@@ -39,9 +53,9 @@ class PdfReportGenerator {
             pw.SizedBox(height: 12),
             pw.Container(
               padding: const pw.EdgeInsets.all(12),
-              decoration: pw.BoxDecoration(
+              decoration: const pw.BoxDecoration(
                 color: PdfColors.grey200,
-                borderRadius: const pw.BorderRadius.all(pw.Radius.circular(8)),
+                borderRadius: pw.BorderRadius.all(pw.Radius.circular(8)),
               ),
               child: pw.Row(
                 mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -97,6 +111,6 @@ class PdfReportGenerator {
       ),
     );
 
-    await Printing.sharePdf(bytes: await pdf.save(), filename: 'MoCU_Attendance_${session.courseCode}.pdf');
+    await Printing.sharePdf(bytes: await pdf.save(), filename: 'Attendance_${session.courseCode}.pdf');
   }
 }

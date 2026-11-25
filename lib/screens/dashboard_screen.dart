@@ -62,78 +62,58 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final groupCode = user?.groupCode.isNotEmpty == true ? ' • Group: ${user!.groupCode}' : '';
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24.0),
+      padding: const EdgeInsets.all(20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Clean, compact header without bloated text
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Welcome back, ${user?.name ?? 'Student'}.',
-                      style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                            fontSize: 32,
+                      'Welcome, ${user?.name ?? 'Student'}$groupCode',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             color: AppColors.primary,
+                            fontWeight: FontWeight.bold,
                           ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      "MoCU Pilot Portal$groupCode • Here's your live campus overview.",
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: AppColors.onSurfaceVariant,
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceContainerLow,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.outlineVariant),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.calendar_month, size: 20, color: AppColors.onSurfaceVariant),
-                    const SizedBox(width: 8),
+                    const SizedBox(height: 2),
                     Text(
                       DateHelper.getFormattedDate(),
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                            color: AppColors.onSurfaceVariant,
-                          ),
+                      style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 12),
                     ),
                   ],
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
           _buildLiveAttendanceBanner(context),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
           StaggeredGrid.count(
             crossAxisCount: 12,
-            mainAxisSpacing: 24,
-            crossAxisSpacing: 24,
+            mainAxisSpacing: 16,
+            crossAxisSpacing: 16,
             children: [
               StaggeredGridTile.count(
-                crossAxisCellCount: MediaQuery.of(context).size.width > 600 ? 8 : 12,
+                crossAxisCellCount: MediaQuery.of(context).size.width > 600 ? 7 : 12,
                 mainAxisCellCount: 5,
                 child: _buildNextClassCard(context),
               ),
               StaggeredGridTile.count(
-                crossAxisCellCount: MediaQuery.of(context).size.width > 600 ? 4 : 12,
+                crossAxisCellCount: MediaQuery.of(context).size.width > 600 ? 5 : 12,
                 mainAxisCellCount: 5,
                 child: _buildDeadlinesCard(context),
               ),
               StaggeredGridTile.count(
-                crossAxisCellCount: MediaQuery.of(context).size.width > 600 ? 12 : 12,
-                mainAxisCellCount: 5,
+                crossAxisCellCount: 12,
+                mainAxisCellCount: 4,
                 child: _buildAnnouncementsCard(context),
               ),
             ],
@@ -166,48 +146,50 @@ class _DashboardScreenState extends State<DashboardScreen> {
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: AppColors.outlineVariant),
           ),
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: AppColors.primaryContainer,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  'UP NEXT (LIVE TIMETABLE)',
+                  'UP NEXT',
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
                         color: AppColors.onPrimaryContainer,
                         fontWeight: FontWeight.bold,
                       ),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
               Text(
                 nextClass?.courseName.isNotEmpty == true ? nextClass!.courseName : 'No Classes Scheduled Today',
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: AppColors.primary,
+                      fontWeight: FontWeight.bold,
                     ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
+              const SizedBox(height: 4),
               Text(
-                nextClass != null ? '${nextClass.venue} • Instructor: ${nextClass.instructor}' : 'Check schedule screen for updates',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: AppColors.onSurfaceVariant,
-                    ),
+                nextClass != null ? '${nextClass.venue} • ${nextClass.instructor}' : 'Enjoy your free time',
+                style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 12),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
               Row(
                 children: [
-                  const Icon(Icons.schedule, color: AppColors.primary, size: 24),
-                  const SizedBox(width: 8),
+                  const Icon(Icons.schedule, color: AppColors.primary, size: 18),
+                  const SizedBox(width: 6),
                   Text(
                     nextClass?.startTime.isNotEmpty == true ? '${nextClass!.startTime} - ${nextClass.endTime}' : '--:--',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                   ),
                 ],
               ),
@@ -220,7 +202,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildDeadlinesCard(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(16),
@@ -233,44 +215,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'MoCU Notice Board',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                'MoCU Notices',
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: AppColors.primary,
+                      fontWeight: FontWeight.bold,
                     ),
               ),
-              const Icon(Icons.campaign, color: AppColors.secondary),
+              const Icon(Icons.campaign, color: AppColors.secondary, size: 20),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 12),
           _buildDeadlineItem(
             context,
-            'Timetable Synchronization',
-            'Live from PocketBase',
+            'Timetable Sync',
+            'Live PocketBase',
             'Active',
             AppColors.primary,
             AppColors.surfaceContainerLow,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
           _buildDeadlineItem(
             context,
-            'Cancellation Alerts',
-            'Instant push enabled',
+            'Attendance Alerts',
+            'Instant Tracking',
             '24/7',
             AppColors.secondaryContainer,
             AppColors.secondaryContainer.withOpacity(0.1),
-          ),
-          const Spacer(),
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton(
-              onPressed: () {},
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: AppColors.outlineVariant),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                padding: const EdgeInsets.symmetric(vertical: 12),
-              ),
-              child: const Text('View Official Calendar', style: TextStyle(color: AppColors.primary)),
-            ),
           ),
         ],
       ),
@@ -279,21 +249,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildDeadlineItem(BuildContext context, String title, String subtitle, String date, Color color, Color bgColor) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(8),
-        border: Border(left: BorderSide(color: color, width: 4)),
+        border: Border(left: BorderSide(color: color, width: 3)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title, style: Theme.of(context).textTheme.labelLarge?.copyWith(color: AppColors.primary)),
-              Text(subtitle, style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppColors.onSurfaceVariant)),
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: Theme.of(context).textTheme.labelMedium?.copyWith(color: AppColors.primary, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
+                Text(subtitle, style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppColors.onSurfaceVariant), overflow: TextOverflow.ellipsis),
+              ],
+            ),
           ),
           Text(date, style: Theme.of(context).textTheme.labelSmall?.copyWith(color: color, fontWeight: FontWeight.bold)),
         ],
@@ -316,45 +288,47 @@ class _DashboardScreenState extends State<DashboardScreen> {
         return Column(
           children: activeSessions.map((session) {
             return Container(
-              margin: const EdgeInsets.only(bottom: 16),
-              padding: const EdgeInsets.all(20),
+              margin: const EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: Colors.red.shade50,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.red.shade300, width: 2),
+                border: Border.all(color: Colors.red.shade300, width: 1.5),
               ),
               child: Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(color: Colors.red.shade100, shape: BoxShape.circle),
-                    child: const Icon(Icons.qr_code_scanner, color: Colors.red, size: 28),
+                    child: const Icon(Icons.qr_code_scanner, color: Colors.red, size: 24),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           children: [
-                            Container(width: 10, height: 10, decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle)),
+                            Container(width: 8, height: 8, decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle)),
                             const SizedBox(width: 6),
-                            const Text('LIVE ATTENDANCE SESSION ACTIVE', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 13)),
+                            const Text('LIVE SESSION ACTIVE', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 11)),
                           ],
                         ),
-                        const SizedBox(height: 4),
+                        const SizedBox(height: 2),
                         Text(
-                          '${session.courseCode} • Lecturer: ${session.lecturerName}',
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.primary),
+                          '${session.courseCode} • ${session.lecturerName}',
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.primary),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         const Text(
-                          'Tap below to scan the lecturer\'s rotating dynamic QR code and check in.',
-                          style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 12),
+                          'Tap to scan dynamic QR code.',
+                          style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 11),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: 8),
                   ElevatedButton.icon(
                     onPressed: () async {
                       final result = await Navigator.push(
@@ -369,12 +343,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         });
                       }
                     },
-                    icon: const Icon(Icons.camera_alt),
-                    label: const Text('Scan QR Code'),
+                    icon: const Icon(Icons.camera_alt, size: 16),
+                    label: const Text('Scan'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red.shade700,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                     ),
                   ),
                 ],
@@ -388,7 +362,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildAnnouncementsCard(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(16),
@@ -399,12 +373,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
         children: [
           Row(
             children: [
-              const Icon(Icons.campaign, color: AppColors.secondary),
+              const Icon(Icons.campaign, color: AppColors.secondary, size: 20),
               const SizedBox(width: 8),
-              Text('Live Targeted Announcements', style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.primary)),
+              Text('Targeted Announcements', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.primary, fontWeight: FontWeight.bold)),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           FutureBuilder<List<PostModel>>(
             future: _postsFuture,
             builder: (context, snapshot) {
@@ -413,15 +387,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
               }
               final posts = snapshot.data ?? [];
               if (posts.isEmpty) {
-                return const Text('No announcements found.');
+                return const Text('No announcements found.', style: TextStyle(fontSize: 12, color: AppColors.onSurfaceVariant));
               }
 
               return Column(
-                children: posts.take(3).map((post) {
+                children: posts.take(2).map((post) {
                   return Padding(
-                    padding: const EdgeInsets.only(bottom: 12.0),
+                    padding: const EdgeInsets.only(bottom: 8.0),
                     child: Container(
-                      padding: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: AppColors.surfaceContainerLow,
                         borderRadius: BorderRadius.circular(8),
@@ -433,12 +407,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(post.title, style: Theme.of(context).textTheme.labelLarge?.copyWith(color: AppColors.primary)),
-                                Text(post.content, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.bodySmall),
+                                Text(post.title, style: Theme.of(context).textTheme.labelMedium?.copyWith(color: AppColors.primary, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
+                                Text(post.content, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 11, color: AppColors.onSurfaceVariant)),
                               ],
                             ),
                           ),
-                          Text(post.created?.toIso8601String().substring(0, 10) ?? '', style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppColors.onSurfaceVariant)),
+                          const SizedBox(width: 8),
+                          Text(post.created?.toIso8601String().substring(0, 10) ?? '', style: const TextStyle(fontSize: 10, color: AppColors.onSurfaceVariant)),
                         ],
                       ),
                     ),

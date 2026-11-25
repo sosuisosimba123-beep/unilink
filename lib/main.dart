@@ -4,7 +4,6 @@ import 'screens/auth/login_screen.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/schedule_screen.dart';
 import 'screens/campus_feed_screen.dart';
-import 'screens/support_screen.dart';
 import 'screens/lecturer/lecturer_classes_screen.dart';
 import 'screens/lecturer/lecturer_materials_screen.dart';
 import 'screens/admin/admin_overview_screen.dart';
@@ -93,14 +92,12 @@ class _MainShellState extends State<MainShell> {
         const DashboardScreen(),
         const ScheduleScreen(),
         const CampusFeedScreen(),
-        const SupportScreen(),
       ];
-      navLabels = ['Dashboard', 'Schedule', 'Campus', 'Support'];
+      navLabels = ['Dashboard', 'Schedule', 'Campus'];
       destinations = const [
         NavigationDestination(icon: Icon(Icons.dashboard_outlined), selectedIcon: Icon(Icons.dashboard), label: 'Dashboard'),
         NavigationDestination(icon: Icon(Icons.calendar_today_outlined), selectedIcon: Icon(Icons.calendar_today), label: 'Schedule'),
         NavigationDestination(icon: Icon(Icons.map_outlined), selectedIcon: Icon(Icons.map), label: 'Campus'),
-        NavigationDestination(icon: Icon(Icons.help_outline), selectedIcon: Icon(Icons.help), label: 'Support'),
       ];
     }
 
