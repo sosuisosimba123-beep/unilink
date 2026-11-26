@@ -43,24 +43,26 @@ class _CampusFeedScreenState extends State<CampusFeedScreen> with SingleTickerPr
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Campus Central',
-                    style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                          fontSize: 32,
-                          color: AppColors.primary,
-                        ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Stay updated with live official news and targeted course activities.',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: AppColors.onSurfaceVariant,
-                        ),
-                  ),
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Campus Central',
+                      style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Stay updated with live official news and targeted course activities.',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.onSurfaceVariant,
+                          ),
+                    ),
+                  ],
+                ),
               ),
               IconButton(
                 onPressed: () {

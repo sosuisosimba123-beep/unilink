@@ -7,6 +7,7 @@ class UserModel {
   final String programme;
   final String groupCode;
   final String registrationNumber;
+  final String institution;
   final int year;
   final bool isOnCampus;
   final double latitude;
@@ -23,6 +24,7 @@ class UserModel {
     required this.programme,
     required this.groupCode,
     required this.registrationNumber,
+    required this.institution,
     required this.year,
     required this.isOnCampus,
     required this.latitude,
@@ -55,6 +57,7 @@ class UserModel {
       programme: json['programme'] ?? '',
       groupCode: json['group_code'] ?? '',
       registrationNumber: json['registration_number'] ?? '',
+      institution: json['institution'] ?? '',
       year: parsedYear,
       isOnCampus: json['is_on_campus'] ?? true,
       latitude: _parseDouble(json['latitude'], -3.3456),
@@ -73,6 +76,7 @@ class UserModel {
         'programme': programme,
         'group_code': groupCode,
         'registration_number': registrationNumber,
+        'institution': institution,
         'year': year,
         'is_on_campus': isOnCampus,
         'latitude': latitude,
