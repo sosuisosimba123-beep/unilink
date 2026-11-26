@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../theme.dart';
 import '../models/schedule_model.dart';
 import '../models/post_model.dart';
@@ -93,31 +92,36 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 20),
-          _buildLiveAttendanceBanner(context),
           const SizedBox(height: 16),
-          StaggeredGrid.count(
-            crossAxisCount: 12,
-            mainAxisSpacing: 16,
-            crossAxisSpacing: 16,
-            children: [
-              StaggeredGridTile.count(
-                crossAxisCellCount: MediaQuery.of(context).size.width > 600 ? 7 : 12,
-                mainAxisCellCount: 5,
-                child: _buildNextClassCard(context),
-              ),
-              StaggeredGridTile.count(
-                crossAxisCellCount: MediaQuery.of(context).size.width > 600 ? 5 : 12,
-                mainAxisCellCount: 5,
-                child: _buildDeadlinesCard(context),
-              ),
-              StaggeredGridTile.count(
-                crossAxisCellCount: 12,
-                mainAxisCellCount: 4,
-                child: _buildAnnouncementsCard(context),
-              ),
-            ],
+          _buildLiveAttendanceBanner(context),
+          const SizedBox(height: 12),
+          // Responsive layout replacing fixed staggered grid to prevent vertical clipping
+          LayoutBuilder(
+            builder: (context, constraints) {
+              bool isWide = constraints.maxWidth > 600;
+              if (isWide) {
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(flex: 7, child: _buildNextClassCard(context)),
+                    const SizedBox(width: 16),
+                    Expanded(flex: 5, child: _buildDeadlinesCard(context)),
+                  ],
+                );
+              } else {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _buildNextClassCard(context),
+                    const SizedBox(height: 12),
+                    _buildDeadlinesCard(context),
+                  ],
+                );
+              }
+            },
           ),
+          const SizedBox(height: 12),
+          _buildAnnouncementsCard(context),
         ],
       ),
     );
@@ -129,6 +133,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Container(
+            height: 140,
             decoration: BoxDecoration(
               color: AppColors.surfaceContainerLowest,
               borderRadius: BorderRadius.circular(16),
@@ -146,13 +151,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: AppColors.outlineVariant),
           ),
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
                   color: AppColors.primaryContainer,
                   borderRadius: BorderRadius.circular(20),
@@ -162,10 +167,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
                         color: AppColors.onPrimaryContainer,
                         fontWeight: FontWeight.bold,
+                        fontSize: 10,
                       ),
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
               Text(
                 nextClass?.courseName.isNotEmpty == true ? nextClass!.courseName : 'No Classes Scheduled Today',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -178,18 +184,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
               const SizedBox(height: 4),
               Text(
                 nextClass != null ? '${nextClass.venue} • ${nextClass.instructor}' : 'Enjoy your free time',
-                style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 12),
+                style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 11),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
               Row(
                 children: [
-                  const Icon(Icons.schedule, color: AppColors.primary, size: 18),
+                  const Icon(Icons.schedule, color: AppColors.primary, size: 16),
                   const SizedBox(width: 6),
                   Text(
                     nextClass?.startTime.isNotEmpty == true ? '${nextClass!.startTime} - ${nextClass.endTime}' : '--:--',
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                   ),
                 ],
               ),
@@ -202,7 +208,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildDeadlinesCard(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(16),
@@ -210,6 +216,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -221,10 +228,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       fontWeight: FontWeight.bold,
                     ),
               ),
-              const Icon(Icons.campaign, color: AppColors.secondary, size: 20),
+              const Icon(Icons.campaign, color: AppColors.secondary, size: 18),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           _buildDeadlineItem(
             context,
             'Timetable Sync',
@@ -233,7 +240,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             AppColors.primary,
             AppColors.surfaceContainerLow,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
           _buildDeadlineItem(
             context,
             'Attendance Alerts',
@@ -249,7 +256,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildDeadlineItem(BuildContext context, String title, String subtitle, String date, Color color, Color bgColor) {
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(8),
@@ -261,13 +268,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text(title, style: Theme.of(context).textTheme.labelMedium?.copyWith(color: AppColors.primary, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
-                Text(subtitle, style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppColors.onSurfaceVariant), overflow: TextOverflow.ellipsis),
+                Text(title, style: Theme.of(context).textTheme.labelMedium?.copyWith(color: AppColors.primary, fontWeight: FontWeight.bold, fontSize: 12), overflow: TextOverflow.ellipsis),
+                Text(subtitle, style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppColors.onSurfaceVariant, fontSize: 10), overflow: TextOverflow.ellipsis),
               ],
             ),
           ),
-          Text(date, style: Theme.of(context).textTheme.labelSmall?.copyWith(color: color, fontWeight: FontWeight.bold)),
+          const SizedBox(width: 8),
+          Text(date, style: Theme.of(context).textTheme.labelSmall?.copyWith(color: color, fontWeight: FontWeight.bold, fontSize: 11)),
         ],
       ),
     );
@@ -289,7 +298,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: activeSessions.map((session) {
             return Container(
               margin: const EdgeInsets.only(bottom: 12),
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
                 color: Colors.red.shade50,
                 borderRadius: BorderRadius.circular(16),
@@ -298,32 +307,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(color: Colors.red.shade100, shape: BoxShape.circle),
-                    child: const Icon(Icons.qr_code_scanner, color: Colors.red, size: 24),
+                    child: const Icon(Icons.qr_code_scanner, color: Colors.red, size: 20),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           children: [
-                            Container(width: 8, height: 8, decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle)),
-                            const SizedBox(width: 6),
-                            const Text('LIVE SESSION ACTIVE', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 11)),
+                            Container(width: 6, height: 6, decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle)),
+                            const SizedBox(width: 4),
+                            const Text('LIVE SESSION ACTIVE', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 10)),
                           ],
                         ),
                         const SizedBox(height: 2),
                         Text(
                           '${session.courseCode} • ${session.lecturerName}',
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.primary),
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.primary),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                         const Text(
                           'Tap to scan dynamic QR code.',
-                          style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 11),
+                          style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 10),
                         ),
                       ],
                     ),
@@ -343,12 +352,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         });
                       }
                     },
-                    icon: const Icon(Icons.camera_alt, size: 16),
-                    label: const Text('Scan'),
+                    icon: const Icon(Icons.camera_alt, size: 14),
+                    label: const Text('Scan', style: TextStyle(fontSize: 12)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red.shade700,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     ),
                   ),
                 ],
@@ -362,7 +371,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildAnnouncementsCard(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(16),
@@ -370,15 +379,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             children: [
-              const Icon(Icons.campaign, color: AppColors.secondary, size: 20),
+              const Icon(Icons.campaign, color: AppColors.secondary, size: 18),
               const SizedBox(width: 8),
-              Text('Targeted Announcements', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.primary, fontWeight: FontWeight.bold)),
+              Text('Targeted Announcements', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.primary, fontWeight: FontWeight.bold, fontSize: 15)),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           FutureBuilder<List<PostModel>>(
             future: _postsFuture,
             builder: (context, snapshot) {
@@ -387,15 +397,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
               }
               final posts = snapshot.data ?? [];
               if (posts.isEmpty) {
-                return const Text('No announcements found.', style: TextStyle(fontSize: 12, color: AppColors.onSurfaceVariant));
+                return const Text('No announcements found.', style: TextStyle(fontSize: 11, color: AppColors.onSurfaceVariant));
               }
 
               return Column(
                 children: posts.take(2).map((post) {
                   return Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
+                    padding: const EdgeInsets.only(bottom: 6.0),
                     child: Container(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: AppColors.surfaceContainerLow,
                         borderRadius: BorderRadius.circular(8),
@@ -407,7 +417,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(post.title, style: Theme.of(context).textTheme.labelMedium?.copyWith(color: AppColors.primary, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
+                                Text(post.title, style: Theme.of(context).textTheme.labelMedium?.copyWith(color: AppColors.primary, fontWeight: FontWeight.bold, fontSize: 12), maxLines: 1, overflow: TextOverflow.ellipsis),
                                 Text(post.content, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 11, color: AppColors.onSurfaceVariant)),
                               ],
                             ),
