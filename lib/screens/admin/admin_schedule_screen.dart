@@ -67,13 +67,15 @@ class _AdminScheduleScreenState extends State<AdminScheduleScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('MOSHI COOPERATIVE UNIVERSITY (MoCU)', style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppColors.onSurfaceVariant)),
-                  const SizedBox(height: 4),
-                  Text('Master Timetable & Hall Allocations', style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: AppColors.primary)),
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('MOSHI COOPERATIVE UNIVERSITY (MoCU)', style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppColors.onSurfaceVariant), maxLines: 1, overflow: TextOverflow.ellipsis),
+                    const SizedBox(height: 4),
+                    Text('Master Timetable & Hall Allocations', style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: AppColors.primary, fontWeight: FontWeight.bold), maxLines: 2, overflow: TextOverflow.ellipsis),
+                  ],
+                ),
               ),
             ],
           ),

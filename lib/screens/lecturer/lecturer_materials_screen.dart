@@ -209,14 +209,17 @@ class _LecturerMaterialsScreenState extends State<LecturerMaterialsScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Publish Material', style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: AppColors.primary)),
-                        const SizedBox(height: 4),
-                        const Text('Share lecture notes, slides, or lab tutorials.', style: TextStyle(color: AppColors.onSurfaceVariant)),
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Publish Material', style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: AppColors.primary, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
+                          const SizedBox(height: 4),
+                          const Text('Share lecture notes, slides, or lab tutorials.', style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 13), maxLines: 1, overflow: TextOverflow.ellipsis),
+                        ],
+                      ),
                     ),
+                    const SizedBox(width: 8),
                     const CircleAvatar(backgroundColor: AppColors.primaryContainer, child: Icon(Icons.post_add, color: Colors.white)),
                   ],
                 ),
