@@ -223,7 +223,15 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(code, style: Theme.of(context).textTheme.labelLarge?.copyWith(color: AppColors.onSurfaceVariant)),
+                                Expanded(
+                                  child: Text(
+                                    code,
+                                    style: Theme.of(context).textTheme.labelLarge?.copyWith(color: AppColors.onSurfaceVariant),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
                                 FutureBuilder<List<RecordModel>>(
                                   future: pocketBaseService.pb.collection('users').getList(filter: 'name ~ "$instructor"').then((res) => res.items),
                                   builder: (context, snapshot) {
