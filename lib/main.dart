@@ -115,19 +115,21 @@ class _MainShellState extends State<MainShell> {
           ),
           child: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
+              padding: EdgeInsets.symmetric(horizontal: isMobile ? 12 : 24),
               child: Row(
                 children: [
-                  const Icon(Icons.school, color: AppColors.primary, size: 28),
-                  const SizedBox(width: 12),
-                  Text(
-                    role == 'lecturer' ? 'UniPortal Faculty' : (role == 'admin' ? 'UniPortal Admin' : 'Unilink - MoCU'),
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.bold,
-                        ),
+                  const Icon(Icons.school, color: AppColors.primary, size: 24),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      isMobile ? 'Unilink' : (role == 'lecturer' ? 'UniPortal Faculty' : (role == 'admin' ? 'UniPortal Admin' : 'Unilink - MoCU')),
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                  const Spacer(),
                   if (!isMobile)
                     Row(
                       children: List.generate(navLabels.length, (index) {
@@ -137,7 +139,7 @@ class _MainShellState extends State<MainShell> {
                         );
                       }),
                     ),
-                  const SizedBox(width: 24),
+                  if (!isMobile) const SizedBox(width: 24),
                   // Role Switcher & Logout
                   PopupMenuButton<String>(
                     onSelected: (action) {
