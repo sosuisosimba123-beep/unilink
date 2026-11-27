@@ -101,6 +101,148 @@ class _ActiveClassSessionScreenState extends State<ActiveClassSessionScreen> {
   @override
   Widget build(BuildContext context) {
     final qrPayload = AttendanceQrHelper.generatePayload(_session.id, _session.secretKey, _timeBucket);
+    bool isMobile = MediaQuery.of(context).size.width < 800;
+
+    Widget qrSection = Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.outlineVariant),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.qr_code_scanner, color: AppColors.primary, size: 20),
+              SizedBox(width: 8),
+              Text('Dynamic Rotating QR Code', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+            ],
+          ),
+          const SizedBox(height: 6),
+          const Text(
+            'Students scan this live code. Refreshes every 10 seconds.',
+            style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 11),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, spreadRadius: 2),
+              ],
+            ),
+            child: QrImageView(
+              data: qrPayload,
+              version: QrVersions.auto,
+              size: isMobile ? 180.0 : 220.0,
+              gapless: false,
+            ),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: 200,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: LinearProgressIndicator(
+                value: _progress,
+                minHeight: 8,
+                backgroundColor: AppColors.surfaceContainerLow,
+                valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+              ),
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'Time Bucket: $_timeBucket',
+            style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 11, fontFamily: 'monospace'),
+          ),
+        ],
+      ),
+    );
+
+    Widget listSection = Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.outlineVariant),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.people, color: AppColors.primary, size: 20),
+                  const SizedBox(width: 8),
+                  Text('Live Check-Ins (${_records.length})', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.green.shade100,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    Container(width: 6, height: 6, decoration: const BoxDecoration(color: Colors.green, shape: BoxShape.circle)),
+                    const SizedBox(width: 4),
+                    const Text('Realtime Active', style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 10)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Expanded(
+            child: _records.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.hourglass_empty, size: 40, color: AppColors.onSurfaceVariant.withOpacity(0.5)),
+                        const SizedBox(height: 8),
+                        const Text('Waiting for students to scan & check in...', style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 12)),
+                      ],
+                    ),
+                  )
+                : ListView.separated(
+                    itemCount: _records.length,
+                    separatorBuilder: (_, __) => const Divider(),
+                    itemBuilder: (context, index) {
+                      final record = _records[index];
+                      return ListTile(
+                        dense: true,
+                        leading: CircleAvatar(
+                          backgroundColor: AppColors.primaryContainer,
+                          child: Text('${index + 1}', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12)),
+                        ),
+                        title: Text(record.studentName.isNotEmpty ? record.studentName : 'Student Name', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                        subtitle: Text('Reg No: ${record.registrationNumber}', style: const TextStyle(fontFamily: 'monospace', fontSize: 11)),
+                        trailing: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            const Text('Present', style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 11)),
+                            Text(record.scannedAt?.toLocal().toString().substring(11, 19) ?? '', style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 10)),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -109,170 +251,37 @@ class _ActiveClassSessionScreenState extends State<ActiveClassSessionScreen> {
         foregroundColor: Colors.white,
         actions: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: ElevatedButton.icon(
               onPressed: _endClassAndExport,
               icon: const Icon(Icons.picture_as_pdf, size: 16),
-              label: const Text('End Class & Export PDF'),
+              label: Text(isMobile ? 'End & PDF' : 'End Class & Export PDF'),
               style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: AppColors.primary),
             ),
           ),
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Left Column: Rotating Dynamic QR Code
-            Expanded(
-              flex: 4,
-              child: Container(
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceContainerLowest,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.outlineVariant),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.qr_code_scanner, color: AppColors.primary),
-                        SizedBox(width: 8),
-                        Text('Dynamic Rotating QR Code', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Students scan this live code. Refreshes every 10 seconds.',
-                      style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 12),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 24),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, spreadRadius: 2),
-                        ],
-                      ),
-                      child: QrImageView(
-                        data: qrPayload,
-                        version: QrVersions.auto,
-                        size: 220.0,
-                        gapless: false,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      width: 220,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: LinearProgressIndicator(
-                          value: _progress,
-                          minHeight: 8,
-                          backgroundColor: AppColors.surfaceContainerLow,
-                          valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Time Bucket: ${_timeBucket}',
-                      style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 12, fontFamily: 'monospace'),
-                    ),
-                  ],
-                ),
+        padding: EdgeInsets.all(isMobile ? 12.0 : 24.0),
+        child: isMobile
+            ? ListView(
+                children: [
+                  qrSection,
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    height: 400,
+                    child: listSection,
+                  ),
+                ],
+              )
+            : Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(flex: 4, child: qrSection),
+                  const SizedBox(width: 24),
+                  Expanded(flex: 6, child: listSection),
+                ],
               ),
-            ),
-            const SizedBox(width: 24),
-            // Right Column: Live Realtime Check-in List
-            Expanded(
-              flex: 6,
-              child: Container(
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceContainerLowest,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.outlineVariant),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(Icons.people, color: AppColors.primary),
-                            const SizedBox(width: 8),
-                            Text('Live Check-Ins (${_records.length})', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                          ],
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: Colors.green.shade100,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            children: [
-                              Container(width: 8, height: 8, decoration: const BoxDecoration(color: Colors.green, shape: BoxShape.circle)),
-                              const SizedBox(width: 6),
-                              const Text('Realtime Active', style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 11)),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Expanded(
-                      child: _records.isEmpty
-                          ? Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.hourglass_empty, size: 48, color: AppColors.onSurfaceVariant.withOpacity(0.5)),
-                                  const SizedBox(height: 12),
-                                  const Text('Waiting for students to scan & check in...', style: TextStyle(color: AppColors.onSurfaceVariant)),
-                                ],
-                              ),
-                            )
-                          : ListView.separated(
-                              itemCount: _records.length,
-                              separatorBuilder: (_, __) => const Divider(),
-                              itemBuilder: (context, index) {
-                                final record = _records[index];
-                                return ListTile(
-                                  leading: CircleAvatar(
-                                    backgroundColor: AppColors.primaryContainer,
-                                    child: Text('${index + 1}', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                                  ),
-                                  title: Text(record.studentName.isNotEmpty ? record.studentName : 'Student Name', style: const TextStyle(fontWeight: FontWeight.bold)),
-                                  subtitle: Text('Reg No: ${record.registrationNumber}', style: const TextStyle(fontFamily: 'monospace', fontSize: 12)),
-                                  trailing: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      const Text('Present', style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 12)),
-                                      Text(record.scannedAt?.toLocal().toString().substring(11, 19) ?? '', style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 11)),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
