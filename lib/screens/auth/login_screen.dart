@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../theme.dart';
 import '../../services/pocketbase_service.dart';
 import '../../main.dart';
+import '../../widgets/unilink_logo.dart';
 import 'program_selection_screen.dart';
 import 'register_screen.dart';
 
@@ -90,26 +91,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryContainer.withOpacity(0.1),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(Icons.school, size: 36, color: AppColors.primary),
-                        ),
-                        const SizedBox(width: 12),
-                        Text(
-                          'Unilink',
-                          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                      ],
+                    const Center(
+                      child: UnilinkLogo(height: 52, fontSize: 28),
                     ),
                     const SizedBox(height: 8),
                     const Text(

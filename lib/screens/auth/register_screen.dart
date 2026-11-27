@@ -4,6 +4,7 @@ import '../../services/pocketbase_repository.dart';
 import '../../services/pocketbase_service.dart';
 import '../../models/programme_model.dart';
 import '../../main.dart';
+import '../../widgets/unilink_logo.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -162,26 +163,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryContainer.withOpacity(0.1),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(Icons.person_add, size: 36, color: AppColors.primary),
-                        ),
-                        const SizedBox(width: 12),
-                        Text(
-                          'Register Now',
-                          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                      ],
+                    const Center(
+                      child: UnilinkLogo(height: 52, fontSize: 28),
                     ),
                     const SizedBox(height: 8),
                     const Text(

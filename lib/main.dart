@@ -11,6 +11,7 @@ import 'screens/admin/admin_schedule_screen.dart';
 import 'screens/admin/admin_notices_screen.dart';
 import 'services/pocketbase_service.dart';
 import 'services/background_location_service.dart';
+import 'widgets/unilink_logo.dart';
 
 void main() {
   runApp(const UnilinkApp());
@@ -118,14 +119,14 @@ class _MainShellState extends State<MainShell> {
               padding: EdgeInsets.symmetric(horizontal: isMobile ? 12 : 24),
               child: Row(
                 children: [
-                  const Icon(Icons.school, color: AppColors.primary, size: 24),
+                  const UnilinkLogo(height: 28, fontSize: 15),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      isMobile ? 'Unilink' : (role == 'lecturer' ? 'UniPortal Faculty' : (role == 'admin' ? 'UniPortal Admin' : 'Unilink - MoCU')),
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.bold,
+                      isMobile ? '' : (role == 'lecturer' ? 'UniPortal Faculty' : (role == 'admin' ? 'UniPortal Admin' : 'MoCU Campus')),
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            color: AppColors.onSurfaceVariant,
+                            fontWeight: FontWeight.w500,
                           ),
                       overflow: TextOverflow.ellipsis,
                     ),
