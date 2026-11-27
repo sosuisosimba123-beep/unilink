@@ -256,27 +256,32 @@ class _LecturerClassesScreenState extends State<LecturerClassesScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Row(
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: AppColors.primaryContainer,
-                      child: Icon(Icons.campaign, color: Colors.white),
-                    ),
-                    SizedBox(width: 16),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Instant Notice / Cancellation', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                        Text('Notify students instantly if a session is called off', style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 12)),
-                      ],
-                    ),
-                  ],
+                const Expanded(
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: AppColors.primaryContainer,
+                        child: Icon(Icons.campaign, color: Colors.white, size: 20),
+                      ),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Instant Notice / Cancellation', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14), maxLines: 1, overflow: TextOverflow.ellipsis),
+                            Text('Notify students if session is called off', style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 11), maxLines: 1, overflow: TextOverflow.ellipsis),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
+                const SizedBox(width: 8),
                 ElevatedButton.icon(
                   onPressed: _showNoticeModal,
-                  icon: const Icon(Icons.add, size: 16),
-                  label: const Text('Post Notice'),
-                  style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white),
+                  icon: const Icon(Icons.add, size: 14),
+                  label: const Text('Post', style: TextStyle(fontSize: 12)),
+                  style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8)),
                 ),
               ],
             ),
