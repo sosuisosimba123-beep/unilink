@@ -96,9 +96,16 @@ class _AdminScheduleScreenState extends State<AdminScheduleScreen> {
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.cloud_upload, color: AppColors.primary, size: 28),
-                    const SizedBox(width: 12),
-                    Text('Dedicated MoCU Timetable JSON Importer', style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.primary)),
+                    const Icon(Icons.cloud_upload, color: AppColors.primary, size: 24),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        'MoCU Timetable JSON Importer',
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.primary, fontWeight: FontWeight.bold),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 8),
