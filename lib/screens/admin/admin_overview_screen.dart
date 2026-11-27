@@ -256,7 +256,15 @@ class _AdminOverviewScreenState extends State<AdminOverviewScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(venue, style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary)),
+                    Expanded(
+                      child: Text(
+                        venue,
+                        style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                       decoration: BoxDecoration(color: AppColors.surfaceContainerLow, borderRadius: BorderRadius.circular(6)),
