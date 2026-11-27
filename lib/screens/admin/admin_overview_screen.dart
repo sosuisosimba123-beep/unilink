@@ -214,7 +214,7 @@ class _AdminOverviewScreenState extends State<AdminOverviewScreen> {
   Widget _buildStatCard(BuildContext context, String value, String label, String sub, IconData icon) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: AppColors.surfaceContainerLowest,
           borderRadius: BorderRadius.circular(16),
@@ -223,11 +223,11 @@ class _AdminOverviewScreenState extends State<AdminOverviewScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, color: AppColors.primary, size: 20),
-            const SizedBox(height: 8),
-            Text(value, style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: AppColors.primary)),
-            Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-            Text(sub, style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 11)),
+            Icon(icon, color: AppColors.primary, size: 18),
+            const SizedBox(height: 6),
+            Text(value, style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.primary, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
+            Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11), maxLines: 1, overflow: TextOverflow.ellipsis),
+            Text(sub, style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 10), maxLines: 1, overflow: TextOverflow.ellipsis),
           ],
         ),
       ),
