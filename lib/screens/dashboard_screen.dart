@@ -61,7 +61,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final groupCode = user?.groupCode.isNotEmpty == true ? ' • Group: ${user!.groupCode}' : '';
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -92,7 +92,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 14),
           _buildLiveAttendanceBanner(context),
           const SizedBox(height: 12),
           // Responsive layout replacing fixed staggered grid to prevent vertical clipping
@@ -298,7 +298,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: activeSessions.map((session) {
             return Container(
               margin: const EdgeInsets.only(bottom: 12),
-              padding: const EdgeInsets.all(14),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: Colors.red.shade50,
                 borderRadius: BorderRadius.circular(16),
@@ -307,11 +307,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(6),
                     decoration: BoxDecoration(color: Colors.red.shade100, shape: BoxShape.circle),
-                    child: const Icon(Icons.qr_code_scanner, color: Colors.red, size: 20),
+                    child: const Icon(Icons.qr_code_scanner, color: Colors.red, size: 18),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -320,25 +320,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           children: [
                             Container(width: 6, height: 6, decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle)),
                             const SizedBox(width: 4),
-                            const Text('LIVE SESSION ACTIVE', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 10)),
+                            const Text('LIVE SESSION ACTIVE', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 9)),
                           ],
                         ),
                         const SizedBox(height: 2),
                         Text(
                           '${session.courseCode} • ${session.lecturerName}',
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.primary),
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.primary),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                         const Text(
                           'Tap to scan dynamic QR code.',
                           style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 10),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  ElevatedButton.icon(
+                  const SizedBox(width: 6),
+                  ElevatedButton(
                     onPressed: () async {
                       final result = await Navigator.push(
                         context,
@@ -352,13 +354,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         });
                       }
                     },
-                    icon: const Icon(Icons.camera_alt, size: 14),
-                    label: const Text('Scan', style: TextStyle(fontSize: 12)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red.shade700,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.compact,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
+                    child: const Text('Scan', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
                   ),
                 ],
               ),
