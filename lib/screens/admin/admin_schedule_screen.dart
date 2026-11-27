@@ -181,7 +181,7 @@ class _AdminScheduleScreenState extends State<AdminScheduleScreen> {
 
   Widget _buildVenueCard(String name, String sub, String status, String details, bool isOccupied) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(16),
@@ -193,21 +193,26 @@ class _AdminScheduleScreenState extends State<AdminScheduleScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  const Icon(Icons.meeting_room, color: AppColors.primary),
-                  const SizedBox(width: 12),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                      Text(sub, style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 12)),
-                    ],
-                  ),
-                ],
+              Expanded(
+                child: Row(
+                  children: [
+                    const Icon(Icons.meeting_room, color: AppColors.primary, size: 22),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15), maxLines: 1, overflow: TextOverflow.ellipsis),
+                          Text(sub, style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 11), maxLines: 1, overflow: TextOverflow.ellipsis),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
+              const SizedBox(width: 8),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: isOccupied ? AppColors.primaryContainer.withOpacity(0.1) : Colors.green.shade100,
                   borderRadius: BorderRadius.circular(12),
@@ -223,14 +228,14 @@ class _AdminScheduleScreenState extends State<AdminScheduleScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: AppColors.surfaceContainerLow,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Text(details, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 13)),
+            child: Text(details, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 12), maxLines: 2, overflow: TextOverflow.ellipsis),
           ),
         ],
       ),
