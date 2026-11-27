@@ -31,7 +31,7 @@ class _AdminNoticesScreenState extends State<AdminNoticesScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Create Announcement (Posts Collection)'),
+        title: const Text('Create Announcement'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -55,7 +55,7 @@ class _AdminNoticesScreenState extends State<AdminNoticesScreen> {
               setState(() {
                 _loadPosts();
               });
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Notice published to posts collection!')));
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Notice published successfully!')));
             },
             child: const Text('Publish'),
           ),
@@ -67,23 +67,37 @@ class _AdminNoticesScreenState extends State<AdminNoticesScreen> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24.0),
+      padding: const EdgeInsets.all(20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Broadcast Notices (Posts)', style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: AppColors.primary)),
+              Expanded(
+                child: Text(
+                  'Broadcast Notices',
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: AppColors.primary, fontWeight: FontWeight.bold),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(width: 8),
               ElevatedButton.icon(
                 onPressed: _showCreateNoticeDialog,
-                icon: const Icon(Icons.add, size: 16),
-                label: const Text('New Notice'),
-                style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white),
+                icon: const Icon(Icons.add, size: 14),
+                label: const Text('New', style: TextStyle(fontSize: 12)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
           FutureBuilder<List<PostModel>>(
             future: _postsFuture,
             builder: (context, snapshot) {
@@ -99,7 +113,7 @@ class _AdminNoticesScreenState extends State<AdminNoticesScreen> {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: posts.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 16),
+                separatorBuilder: (_, __) => const SizedBox(height: 12),
                 itemBuilder: (context, index) {
                   final post = posts[index];
                   return _buildNoticeCard(post);
@@ -114,7 +128,7 @@ class _AdminNoticesScreenState extends State<AdminNoticesScreen> {
 
   Widget _buildNoticeCard(PostModel post) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(16),
@@ -132,27 +146,27 @@ class _AdminNoticesScreenState extends State<AdminNoticesScreen> {
                   color: AppColors.primaryContainer.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Text('ACTIVE • LIVE', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: AppColors.primary)),
+                child: const Text('ACTIVE • LIVE', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, color: AppColors.primary)),
               ),
               IconButton(
-                icon: const Icon(Icons.delete_outline, color: Colors.red),
+                icon: const Icon(Icons.delete_outline, color: Colors.red, size: 20),
                 onPressed: () async {
                   await pbRepository.pb.collection('posts').delete(post.id);
                   if (!mounted) return;
                   setState(() {
                     _loadPosts();
                   });
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Notice deleted from posts')));
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Notice deleted')));
                 },
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          Text(post.title, style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.primary, fontSize: 18)),
+          const SizedBox(height: 6),
+          Text(post.title, style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.primary, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
           const SizedBox(height: 4),
-          Text(post.content, style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 14), maxLines: 2, overflow: TextOverflow.ellipsis),
+          Text(post.content, style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 13), maxLines: 2, overflow: TextOverflow.ellipsis),
           const SizedBox(height: 8),
-          Text('Created: ${post.created?.toIso8601String().substring(0, 10) ?? ''}', style: const TextStyle(color: AppColors.outlineVariant, fontSize: 12)),
+          Text('Created: ${post.created?.toIso8601String().substring(0, 10) ?? ''}', style: const TextStyle(color: AppColors.outlineVariant, fontSize: 11)),
         ],
       ),
     );

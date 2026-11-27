@@ -169,32 +169,42 @@ class _LecturerClassesScreenState extends State<LecturerClassesScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'MOSHI COOPERATIVE UNIVERSITY (MoCU)',
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: AppColors.onSurfaceVariant,
-                          letterSpacing: 1.2,
-                        ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Welcome back, $lecturerName',
-                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                          color: AppColors.primary,
-                        ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '${DateHelper.getTodayShort()} • Faculty Portal',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.onSurfaceVariant,
-                        ),
-                  ),
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'MOSHI COOPERATIVE UNIVERSITY (MoCU)',
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            color: AppColors.onSurfaceVariant,
+                            letterSpacing: 1.1,
+                          ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Welcome back, $lecturerName',
+                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${DateHelper.getTodayShort()} • Faculty Portal',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.onSurfaceVariant,
+                          ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
               ),
+              const SizedBox(width: 8),
               IconButton(
                 onPressed: () {
                   setState(() {
